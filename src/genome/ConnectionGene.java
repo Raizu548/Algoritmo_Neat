@@ -10,6 +10,8 @@ public class ConnectionGene extends Gene {
     private double weight;
     private boolean enabled = true;
 
+    private int replaceIndex;
+
     // Constructor
     public ConnectionGene(NodeGene from, NodeGene to){
         this.from = from;
@@ -17,6 +19,14 @@ public class ConnectionGene extends Gene {
     }
 
     // Getters and Setters
+    public int getReplaceIndex() {
+        return replaceIndex;
+    }
+
+    public void setReplaceIndex(int replaceIndex) {
+        this.replaceIndex = replaceIndex;
+    }
+
     public NodeGene getFrom() {
         return from;
     }

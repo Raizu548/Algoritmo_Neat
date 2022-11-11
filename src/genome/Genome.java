@@ -36,8 +36,15 @@ public class Genome {
 
         Genome g1 = this;
 
-        int highest_innovation_gene1 = g1.getConnections().get(g1.getConnections().size()-1).getInnovation_number();
-        int highest_innovation_gene2 = g2.getConnections().get(g2.getConnections().size()-1).getInnovation_number();
+        int highest_innovation_gene1 = 0;
+        if (g1.getConnections().size() != 0){
+            highest_innovation_gene1 = g1.getConnections().get(g1.getConnections().size()-1).getInnovation_number();
+        }
+
+        int highest_innovation_gene2 = 0;
+        if (g2.getConnections().size() != 0){
+            highest_innovation_gene2 = g2.getConnections().get(g2.getConnections().size()-1).getInnovation_number();
+        }
 
         if (highest_innovation_gene1 < highest_innovation_gene2){
             Genome g = g1;
@@ -78,7 +85,7 @@ public class Genome {
             }
         }
 
-        weight_diff /= similar;
+        weight_diff /= Math.max(1,similar);
         excess = g1.getConnections().size() - index_g1;
 
         double N = Math.max(g1.getConnections().size(), g2.getConnections().size());
@@ -210,9 +217,17 @@ public class Genome {
         NodeGene from = con.getFrom();
         NodeGene to = con.getTo();
 
-        NodeGene middle = neat.getNode();
-        middle.setX((from.getX() + to.getX()) / 2); // toma la mitad de la posicion de los 2 nodos en X
-        middle.setY((from.getY() + to.getY()) / 2 + Math.random() * 0.1 - 0.05); // Posicion Y
+        int replaceIndex = neat.getReplaceIndex(from,to);
+        //replaceIndex = 0;
+        NodeGene middle;
+        if (replaceIndex == 0){
+            middle = neat.getNode();
+            middle.setX((from.getX() + to.getX()) / 2); // toma la mitad de la posicion de los 2 nodos en X
+            middle.setY((from.getY() + to.getY()) / 2 + Math.random() * 0.1 - 0.05); // Posicion Y
+            neat.setReplaceIndex(from,to,middle.getInnovation_number());
+        } else {
+            middle = neat.getNode(replaceIndex);
+        }
 
         ConnectionGene con1 = neat.getConnection(from, middle);
         ConnectionGene con2 = neat.getConnection(middle, to);
@@ -250,3 +265,5 @@ public class Genome {
         }
     }
 }
+
+// borrar calculadora y generar calculadora
